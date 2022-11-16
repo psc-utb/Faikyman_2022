@@ -13,6 +13,9 @@ public class KnightController : MonoBehaviour
     Rigidbody2D _rigidbody2D;
     Animator _animator;
 
+    bool _utoci = false;
+    bool _muzeSeHybat = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,14 +26,58 @@ public class KnightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float vx = CrossPlatformInputManager.GetAxisRaw("Horizontal");
-
-        bool isMoving = false;
-        if (vx != 0)
+        if (CrossPlatformInputManager.GetButton("Fire1")
+            && _utoci == false)
         {
-            isMoving = true;
+            _animator.SetTrigger("Attack");
+            _utoci = true;
+            _muzeSeHybat = false;
         }
 
-        _animator.SetBool("Moving", isMoving);
+        if (_muzeSeHybat)
+        {
+            float vx = CrossPlatformInputManager.GetAxisRaw("Horizontal");
+
+            bool isMoving = false;
+            if (vx != 0)
+            {
+                isMoving = true;
+            }
+
+            _animator.SetBool("Moving", isMoving);
+
+            if (isMoving)
+            {
+                _rigidbody2D.velocity = new Vector2(vx * speed, _rigidbody2D.velocity.y);
+            }
+            else
+            {
+                _rigidbody2D.velocity = Vector2.zero;
+            }
+        }
+        else
+        {
+            _animator.SetBool("Moving", false);
+            _rigidbody2D.velocity = Vector2.zero;
+        }
+    }
+
+    public void KonecUtoku()
+    {
+        _utoci = false;
+        _muzeSeHybat = true;
+    }
+
+    public void LateUpdate()
+    {
+        Vector2 localScale = transform.localScale;
+
+        if (localScale.x > 0 && _rigidbody2D.velocity.x < 0
+            || localScale.x < 0 && _rigidbody2D.velocity.x > 0)
+        {
+            localScale.x *= -1;
+        }
+
+        transform.localScale = localScale;
     }
 }
