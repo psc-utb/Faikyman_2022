@@ -16,11 +16,14 @@ public class KnightController : MonoBehaviour
     bool _utoci = false;
     bool _muzeSeHybat = true;
 
+    GameObject sword;
+
     // Start is called before the first frame update
     void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        sword = transform.Find("Sword").gameObject;
     }
 
     // Update is called once per frame
@@ -62,11 +65,19 @@ public class KnightController : MonoBehaviour
         }
     }
 
+    public void ZacatekUtoku()
+    {
+        sword.SetActive(true);
+    }
+
     public void KonecUtoku()
     {
         _utoci = false;
         _muzeSeHybat = true;
+
+        sword.SetActive(false);
     }
+
 
     public void LateUpdate()
     {
