@@ -18,41 +18,70 @@ public class DragonAI : MonoBehaviour
     [SerializeField]
     float vzdalenostOdCileProUtok = 2f;
 
+    bool _utoci = false;
+    bool _muzeSeHybat = true;
+
+    GameObject mouth;
+
+    //bool cilVlevo = true;
+    float smerCile;
+
     // Start is called before the first frame update
     void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        mouth = transform.Find("Mouth").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector2 vzdalenost = cil.position - this.transform.position;
-        if (Mathf.Abs(vzdalenost.x) < vzdalenostOdCileProUtok)
+        //cilVlevo = Mathf.Sign(vzdalenost.x) <= 0 ? true : false;
+        smerCile = Mathf.Sign(vzdalenost.x);
+        if (Mathf.Abs(vzdalenost.x) < vzdalenostOdCileProUtok && _utoci == false)
         {
             _animator.SetBool("Moving", false);
             _rigidbody2D.velocity = Vector2.zero;
             _animator.SetTrigger("Attack");
+            _utoci = true;
+            _muzeSeHybat = false;
         }
-        else
+        else if (/*_utoci == false &&*/ _muzeSeHybat == true)
         {
             _animator.SetBool("Moving", true);
-
-            _rigidbody2D.velocity = new Vector2(Mathf.Sign(vzdalenost.x) * speed, _rigidbody2D.velocity.y);
         }
+    }
+
+    public void SetVelocity()
+    {
+        _rigidbody2D.velocity = new Vector2(smerCile * speed, _rigidbody2D.velocity.y);
     }
 
     public void LateUpdate()
     {
         Vector2 localScale = transform.localScale;
 
-        if (localScale.x > 0 && _rigidbody2D.velocity.x < 0
-            || localScale.x < 0 && _rigidbody2D.velocity.x > 0)
+        if (localScale.x > 0 && smerCile < 0
+            || localScale.x < 0 && smerCile > 0)
         {
             localScale.x *= -1;
         }
 
         transform.localScale = localScale;
+    }
+
+    public void ZacatekUtoku()
+    {
+        mouth.SetActive(true);
+    }
+
+    public void KonecUtoku()
+    {
+        _utoci = false;
+        _muzeSeHybat = true;
+
+        mouth.SetActive(false);
     }
 }

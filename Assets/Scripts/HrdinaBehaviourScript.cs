@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class HrdinaBehaviourScript : PostavaBehaviourScript
 {
-    private void Awake()
+    protected new void Awake()
     {
         postava = new Hrdina(jmeno, zdravi, maxPoskozeni, maxObrana);
+        postava.DosloKUtoku += Postava_DosloKUtoku;
     }
 
     // Start is called before the first frame update

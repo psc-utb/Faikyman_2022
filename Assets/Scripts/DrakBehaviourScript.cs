@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class DrakBehaviourScript : PostavaBehaviourScript
 {
-    private void Awake()
+    protected new void Awake()
     {
         postava = new Drak(jmeno, zdravi, maxPoskozeni, maxObrana);
+        postava.DosloKUtoku += Postava_DosloKUtoku;
     }
 
     // Start is called before the first frame update
