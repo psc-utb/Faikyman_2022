@@ -26,6 +26,9 @@ public class DragonAI : MonoBehaviour
     //bool cilVlevo = true;
     float smerCile;
 
+    [SerializeField]
+    GameObject healthBarUI;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +70,8 @@ public class DragonAI : MonoBehaviour
             || localScale.x < 0 && smerCile > 0)
         {
             localScale.x *= -1;
+            if (healthBarUI != null)
+                healthBarUI.transform.localScale = new Vector2(healthBarUI.transform.localScale.x * -1, healthBarUI.transform.localScale.y);
         }
 
         transform.localScale = localScale;

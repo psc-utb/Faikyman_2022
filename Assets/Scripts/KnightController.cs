@@ -18,6 +18,9 @@ public class KnightController : MonoBehaviour
 
     GameObject sword;
 
+    [SerializeField]
+    GameObject healthBarUI;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,6 +90,8 @@ public class KnightController : MonoBehaviour
             || localScale.x < 0 && _rigidbody2D.velocity.x > 0)
         {
             localScale.x *= -1;
+            if (healthBarUI != null)
+                healthBarUI.transform.localScale = new Vector2(healthBarUI.transform.localScale.x * -1, healthBarUI.transform.localScale.y);
         }
 
         transform.localScale = localScale;

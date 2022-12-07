@@ -1,10 +1,11 @@
+using CodeMonkey.HealthSystemCM;
 using hrdina_a_drak.Postavy;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public abstract class PostavaBehaviourScript : MonoBehaviour
+public abstract class PostavaBehaviourScript : MonoBehaviour, IGetHealthSystem
 {
     [SerializeField]
     protected string jmeno;
@@ -19,6 +20,9 @@ public abstract class PostavaBehaviourScript : MonoBehaviour
     protected int maxObrana = 5;
 
     protected Postava postava;
+
+    [SerializeField]
+    TMP_FontAsset fontHit;
 
     protected void Awake()
     {
@@ -46,6 +50,8 @@ public abstract class PostavaBehaviourScript : MonoBehaviour
     {
         _cilScript = cilScript;
         postava.Utok(cilScript.postava);
+        if (cilScript.healthSystem != null)
+            cilScript.healthSystem.SetHealth(cilScript.postava.Zdravi);
     }
 
     public void ZobrazTextZasahu(Vector2 poziceZobrazeni, int hodnotaUtoku)
@@ -57,6 +63,8 @@ public abstract class PostavaBehaviourScript : MonoBehaviour
 
         TextMeshPro textMeshPro = goWithText.AddComponent<TextMeshPro>();
         textMeshPro.fontSize = 16;
+        if (fontHit != null)
+            textMeshPro.font = fontHit;
         textMeshPro.text = (hodnotaUtoku * -1).ToString();
         if (hodnotaUtoku > 0)
         {
@@ -78,5 +86,16 @@ public abstract class PostavaBehaviourScript : MonoBehaviour
         rigidBody2D.velocity = new Vector2(0, 2);
 
         GameObject.Destroy(goWithText, 1);
+    }
+
+    HealthSystem healthSystem;
+    public HealthSystem GetHealthSystem()
+    {
+        if (healthSystem == null)
+            healthSystem = new HealthSystem(zdravi);
+        else
+            healthSystem.SetHealth(postava.Zdravi);
+
+        return healthSystem;
     }
 }
