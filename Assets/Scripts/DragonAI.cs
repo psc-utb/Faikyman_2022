@@ -40,20 +40,23 @@ public class DragonAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 vzdalenost = cil.position - this.transform.position;
-        //cilVlevo = Mathf.Sign(vzdalenost.x) <= 0 ? true : false;
-        smerCile = Mathf.Sign(vzdalenost.x);
-        if (Mathf.Abs(vzdalenost.x) < vzdalenostOdCileProUtok && _utoci == false)
+        if (cil != null)
         {
-            _animator.SetBool("Moving", false);
-            _rigidbody2D.velocity = Vector2.zero;
-            _animator.SetTrigger("Attack");
-            _utoci = true;
-            _muzeSeHybat = false;
-        }
-        else if (/*_utoci == false &&*/ _muzeSeHybat == true)
-        {
-            _animator.SetBool("Moving", true);
+            Vector2 vzdalenost = cil.position - this.transform.position;
+            //cilVlevo = Mathf.Sign(vzdalenost.x) <= 0 ? true : false;
+            smerCile = Mathf.Sign(vzdalenost.x);
+            if (Mathf.Abs(vzdalenost.x) < vzdalenostOdCileProUtok && _utoci == false)
+            {
+                _animator.SetBool("Moving", false);
+                _rigidbody2D.velocity = Vector2.zero;
+                _animator.SetTrigger("Attack");
+                _utoci = true;
+                _muzeSeHybat = false;
+            }
+            else if (/*_utoci == false &&*/ _muzeSeHybat == true)
+            {
+                _animator.SetBool("Moving", true);
+            }
         }
     }
 
@@ -86,6 +89,14 @@ public class DragonAI : MonoBehaviour
     {
         _utoci = false;
         _muzeSeHybat = true;
+
+        mouth.SetActive(false);
+    }
+
+    public void Smrt()
+    {
+        _animator.SetTrigger("Dead");
+        _muzeSeHybat = false;
 
         mouth.SetActive(false);
     }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class PostavaBehaviourScript : MonoBehaviour, IGetHealthSystem
 {
@@ -36,22 +37,30 @@ public abstract class PostavaBehaviourScript : MonoBehaviour, IGetHealthSystem
     // Start is called before the first frame update
     protected void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        
+
     }
 
     PostavaBehaviourScript _cilScript;
+    public UnityEvent postava_zemrela;
     public void Utok(PostavaBehaviourScript cilScript)
     {
-        _cilScript = cilScript;
-        postava.Utok(cilScript.postava);
-        if (cilScript.healthSystem != null)
-            cilScript.healthSystem.SetHealth(cilScript.postava.Zdravi);
+        if (cilScript.postava.JeZiva())
+        {
+            _cilScript = cilScript;
+            postava.Utok(cilScript.postava);
+            if (cilScript.healthSystem != null)
+                cilScript.healthSystem.SetHealth(cilScript.postava.Zdravi);
+            if (cilScript.postava.JeZiva() == false)
+            {
+                cilScript.postava_zemrela?.Invoke();
+            }
+        }
     }
 
     public void ZobrazTextZasahu(Vector2 poziceZobrazeni, int hodnotaUtoku)
@@ -97,5 +106,10 @@ public abstract class PostavaBehaviourScript : MonoBehaviour, IGetHealthSystem
             healthSystem.SetHealth(postava.Zdravi);
 
         return healthSystem;
+    }
+
+    public void PoSmrti()
+    {
+        Destroy(this.gameObject);
     }
 }

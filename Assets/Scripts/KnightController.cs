@@ -96,4 +96,10 @@ public class KnightController : MonoBehaviour
 
         transform.localScale = localScale;
     }
+
+    public void Smrt()
+    {
+        _animator.SetTrigger("Dead");
+        _muzeSeHybat = false;
+    }
 }
